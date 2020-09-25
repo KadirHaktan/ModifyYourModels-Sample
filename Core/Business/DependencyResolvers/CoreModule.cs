@@ -11,11 +11,11 @@ namespace Core.Business.DependencyResolvers
     {
         public void Load(IServiceCollection services)
         {
-            services.AddSignalR();
             services.AddMvc(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)
                 .AddNewtonsoftJson();
 
+            services.AddSignalR();
         }
     }
 }
