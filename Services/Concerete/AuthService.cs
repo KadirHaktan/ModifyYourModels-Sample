@@ -1,5 +1,4 @@
-﻿using Core.Interfaces.Auth;
-using Entities.Concerete;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
@@ -7,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Forge;
 using Core.Business;
+using Core.Interfaces.Services.Auth;
 using Core.Utilities.Configurations;
 
 namespace Services.Concerete
