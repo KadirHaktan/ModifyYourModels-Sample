@@ -56,10 +56,15 @@ namespace API
 
             app.UseAuthorization();
 
+            app.UseMvc();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            app.UseFileServer();
+            
         }
     }
 }
