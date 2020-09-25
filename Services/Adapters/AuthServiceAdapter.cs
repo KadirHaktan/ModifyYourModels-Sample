@@ -3,8 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Interfaces.Auth;
-using Core.Interfaces.Entities.Auth;
+using Core.Interfaces.Services.Auth;
 
 namespace Services.Adapters
 {
