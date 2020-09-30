@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 using Autodesk.Forge;
-using Autodesk.Forge.DesignAutomation;
 using Core.Interfaces.Adapters;
 using Core.Interfaces.Services.Auth;
 using Core.Utilities.Ioc;
-using Microsoft.Extensions.Configuration;
+using Entities.Concerete;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Repository.Abstract;
+using Repository.Concerete;
+using Services.Abstract;
 using Services.Adapters;
+using Services.Adapters.Abstract;
+using Services.Adapters.Concerete;
 using Services.Concerete;
 
 namespace Services.DependencyResolvers
@@ -19,10 +20,19 @@ namespace Services.DependencyResolvers
         
         public void Load(IServiceCollection services)
         {
-            services.AddScoped<ITwoLeggedApi, TwoLeggedApi>();
+            services.AddSingleton<ITwoLeggedApi, TwoLeggedApi>();
 
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IAuthServiceAdapter, AuthServiceAdapter>();
+            services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<IAuthServiceAdapter, AuthServiceAdapter>();
+
+
+            services.AddTransient<IAppBundleService<AutoDeskAppBundle>, AutoDeskAppBundleService>();
+            services.AddTransient<IAppBundleServiceAdapter<AutoDeskAppBundle>, AppBundleServiceAdapter<AutoDeskAppBundle>>();
+
+
+            services.AddScoped<IAutoDeskAppBundleRepository, AutoDeskAppBundleRepository>();
+
+
 
         }
     }
