@@ -11,15 +11,6 @@ namespace Repository.Concerete
     {
         private readonly DesignAutomationClient _designAutomation=new DesignAutomationClient();
 
-        public AppBundle Create(AppBundle entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Alias> CreateAppBundleAsync(string appBundleName, Alias aliasSpec)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<dynamic> CreateAppBundleVersionAsync(string appBundleName, AppBundle appBundleSpec)
         {
@@ -31,10 +22,6 @@ namespace Repository.Concerete
             return await _designAutomation.CreateAppBundleAsync(entity);
         }
 
-        public void CreateVoid(AppBundle entity)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task CreateVoidAsync(AppBundle entity)
         {
@@ -51,5 +38,23 @@ namespace Repository.Concerete
         {
             return await _designAutomation.ModifyAppBundleAliasAsync(appBundleName, Alias, aliasSpec);
         }
+
+        #region these methods have not been used
+        public void CreateVoid(AppBundle entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AppBundle Create(AppBundle entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Alias> CreateAppBundleAsync(string appBundleName, Alias aliasSpec)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
