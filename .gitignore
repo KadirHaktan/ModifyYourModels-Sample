@@ -19,3 +19,6 @@ ModifyYourModels.sln
 /Entities/obj
 /Entities/Entities.csproj
 /API/wwwroot/bundles/UpdateIPTParam.bundle/Contents
+/Repository/obj
+/Repository/Repository.csproj
+/Repository/bin/Debug/netcoreapp3.1
