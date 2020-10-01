@@ -28,7 +28,7 @@ namespace Repository.Concerete
             await _designAutomation.CreateAppBundleAsync(entity);
         }
 
-        public async Task<Page<string>> GetAppBundles(string? page)
+        public async Task<Page<string>> GetAppBundles(string page)
         {
             return await _designAutomation.GetAppBundlesAsync(page);
         }
@@ -38,6 +38,12 @@ namespace Repository.Concerete
         {
             return await _designAutomation.ModifyAppBundleAliasAsync(appBundleName, Alias, aliasSpec);
         }
+
+        public async Task<Page<string>> GetAppEngines(string page)
+        {
+            return await _designAutomation.GetEnginesAsync(page);
+        }
+
 
         #region these methods have not been used
         public void CreateVoid(AppBundle entity)

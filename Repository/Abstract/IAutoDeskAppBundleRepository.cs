@@ -17,7 +17,9 @@ namespace Repository.Abstract
 
         Task<dynamic> CreateAppBundleVersionAsync(string appBundleName, AppBundle appBundleSpec);
 
-        Task<Page<string>> GetAppBundles(string? page);
+        Task<Page<string>> GetAppBundles(string page);
+
+        Task<Page<string>> GetAppEngines(string page);
 
 
     }
