@@ -32,6 +32,9 @@ namespace Services.DependencyResolvers
 
             services.AddScoped<IAutoDeskAppBundleRepository, AutoDeskAppBundleRepository>();
 
+            services.AddTransient<IEngineServices, AutoDeskEngineService>();
+            services.AddTransient<IEngineServiceAdapter, EngineServiceAdapter>();
+
 
 
         }
