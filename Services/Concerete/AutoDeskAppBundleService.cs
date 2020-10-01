@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Autodesk.Forge.DesignAutomation.Model;
 using Core.Utilities.Configurations;
 using Entities.Concerete;
 using Newtonsoft.Json.Linq;
 using Repository.Abstract;
+using RestSharp;
 using Services.Abstract;
 
 namespace Services.Concerete
@@ -14,6 +17,8 @@ namespace Services.Concerete
     {
 
         private readonly IAutoDeskAppBundleRepository _repository;
+
+        public string QualifiedAppBundleId = null;
 
         public AutoDeskAppBundleService(IAutoDeskAppBundleRepository repository)
         {
@@ -38,29 +43,33 @@ namespace Services.Concerete
             Page<string> pages = await _repository.GetAppBundles(null);
 
 
-            dynamic result;
+            dynamic newAppVersion;
 
-            string qualifiedAppBundleId = string.Format("{0}.{1}+{2}", NickName, appBundleName, Alias);
+            QualifiedAppBundleId = string.Format("{0}.{1}+{2}", NickName, appBundleName, Alias);
 
-            if (!pages.Data.Contains(qualifiedAppBundleId))
+            if (!pages.Data.Contains(QualifiedAppBundleId))
             {
-                result=await CreateNewAppBundle(appBundleName,engineName,Alias,1);
+                newAppVersion=await CreateNewAppBundle(appBundleName,engineName,Alias,1);
             }
 
             else
             {
-                result=await CreateNewVersion(engineName, appBundleName, Alias);
+                newAppVersion=await CreateNewVersion(engineName, appBundleName, Alias);
             }
 
 
-            return result;
-
+            return new
+            {
+                newVersion=newAppVersion,
+                packageZipFileName=zipFileName,
+                QualifiedAppBundleId=QualifiedAppBundleId
+            };
 
         }
 
 
         #region async return a value methods
-        private async Task<Alias> CreateNewAppBundle(string appBundleName,string engineName,string Alias,int version)
+        private async Task<dynamic> CreateNewAppBundle(string appBundleName,string engineName,string Alias,int version)
         {
             AppBundle appBundleSpec = new AppBundle()
             {
@@ -70,8 +79,11 @@ namespace Services.Concerete
                 Description = string.Format("Description for {0}", appBundleName)
             };
 
-            
-            CheckOutToNull(await _repository.CreateAsync(appBundleSpec));
+            dynamic newAppVersion = await _repository.CreateAsync(appBundleSpec);
+
+
+
+            CheckOutToNull(newAppVersion);
 
             Alias aliasSpec = new Alias()
             {
@@ -79,15 +91,15 @@ namespace Services.Concerete
                 Version = version
             };
 
-            Alias newAlias = await _repository.CreateAppBundleAsync(appBundleName, aliasSpec);
+            await _repository.CreateAppBundleAsync(appBundleName, aliasSpec);
 
-            return newAlias;
+            return newAppVersion;
 
 
 
         }
 
-        private async Task<Alias> CreateNewVersion(string engineName,string appBundleName,string Alias)
+        private async Task<dynamic> CreateNewVersion(string engineName,string appBundleName,string Alias)
         {
             AppBundle appBundleSpec = new AppBundle()
             {
@@ -102,8 +114,10 @@ namespace Services.Concerete
             {
                 Version = newAppVersion.Version
             };
+            
+            await _repository.ModifyAsync(appBundleName, Alias, aliasPatch);
 
-            return await _repository.ModifyAsync(appBundleName, Alias, aliasPatch);
+            return newAppVersion;
 
         }
 
