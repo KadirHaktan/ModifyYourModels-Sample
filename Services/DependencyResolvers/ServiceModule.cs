@@ -26,11 +26,11 @@ namespace Services.DependencyResolvers
             services.AddSingleton<IAuthServiceAdapter, AuthServiceAdapter>();
 
 
-            services.AddTransient<IAppBundleService<AutoDeskAppBundle>, AutoDeskAppBundleService>();
-            services.AddTransient<IAppBundleServiceAdapter<AutoDeskAppBundle>, AppBundleServiceAdapter<AutoDeskAppBundle>>();
+            services.AddTransient<IAppBundleService, AutoDeskAppBundleService>();
+            services.AddTransient<IAppBundleServiceAdapter, AppBundleServiceAdapter>();
 
 
-            services.AddScoped<IAutoDeskAppBundleRepository, AutoDeskAppBundleRepository>();
+            services.AddScoped<IAutoDeskDesignAutomationRepository,AutoDeskDesignAutomationRepository>();
 
             services.AddTransient<IEngineServices, AutoDeskEngineService>();
             services.AddTransient<IEngineServiceAdapter, EngineServiceAdapter>();
