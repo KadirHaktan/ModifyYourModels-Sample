@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Entities.Abstract;
+using Newtonsoft.Json.Linq;
 using Services.Abstract;
 using Services.Adapters.Abstract;
 
 namespace Services.Adapters.Concerete
 {
-    public class AppBundleServiceAdapter<T> : IAppBundleServiceAdapter<T> where T : class, IAppBundle
+    public class AppBundleServiceAdapter: IAppBundleServiceAdapter
     {
-        private readonly IAppBundleService<T> _appBundleService;
+        private readonly IAppBundleService _appBundleService;
 
-        public AppBundleServiceAdapter(IAppBundleService<T> appBundleService)
+        public AppBundleServiceAdapter(IAppBundleService appBundleService)
         {
             this._appBundleService = appBundleService;
         }
-        public async Task<dynamic> CreateAppBundleAsync(T appBundle, string localBundlesFolder)
+        public async Task<dynamic> CreateAppBundleAsync(JObject appBundle, string localBundlesFolder)
         {
             return await _appBundleService.CreateAppBundle(appBundle, localBundlesFolder);
         }

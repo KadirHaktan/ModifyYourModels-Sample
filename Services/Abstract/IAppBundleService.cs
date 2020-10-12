@@ -7,9 +7,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Services.Abstract
 {
-    public interface IAppBundleService<T> where T:class,IAppBundle
+    public interface IAppBundleService
     {
-        Task<dynamic> CreateAppBundle(T appBundle,string LocalBundlesFolder);
+        Task<dynamic> CreateAppBundle(JObject appBundle,string LocalBundlesFolder);
 
     }
 }

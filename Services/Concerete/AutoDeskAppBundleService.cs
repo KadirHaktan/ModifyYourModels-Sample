@@ -1,34 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Autodesk.Forge.DesignAutomation.Model;
 using Core.Utilities.Configurations;
 using Entities.Concerete;
 using Newtonsoft.Json.Linq;
 using Repository.Abstract;
-using RestSharp;
 using Services.Abstract;
 
 namespace Services.Concerete
 {
-    public class AutoDeskAppBundleService : IAppBundleService<AutoDeskAppBundle>
+    public class AutoDeskAppBundleService : IAppBundleService
     {
 
-        private readonly IAutoDeskAppBundleRepository _repository;
+        private readonly IAutoDeskDesignAutomationRepository _repository;
 
         public string QualifiedAppBundleId = null;
 
-        public AutoDeskAppBundleService(IAutoDeskAppBundleRepository repository)
+        public AutoDeskAppBundleService(IAutoDeskDesignAutomationRepository repository)
         {
             this._repository = repository;
         }
         
         
-        public async Task<dynamic> CreateAppBundle(AutoDeskAppBundle appBundle,string LocalBundlesFolder)
+        public async Task<dynamic> CreateAppBundle(JObject appBundlesSpecs,string LocalBundlesFolder)
         {
-            var appBundlesSpecs = appBundle.appBundleSpecs;
 
             string zipFileName = appBundlesSpecs["zipFileName"].Value<string>();
             string engineName = appBundlesSpecs["engineName"].Value<string>();

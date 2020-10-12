@@ -14,8 +14,8 @@ namespace Services.Concerete
     {
         private readonly IAuthServiceAdapter _authServiceAdapter;
 
-        private readonly IAutoDeskAppBundleRepository _repository;
-        public AutoDeskEngineService(IAuthServiceAdapter authServiceAdapter,IAutoDeskAppBundleRepository repository)
+        private readonly IAutoDeskDesignAutomationRepository _repository;
+        public AutoDeskEngineService(IAuthServiceAdapter authServiceAdapter,IAutoDeskDesignAutomationRepository repository)
         {
             this._authServiceAdapter = authServiceAdapter;
             this._repository = repository;
