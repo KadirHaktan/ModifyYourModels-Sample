@@ -7,7 +7,7 @@ using Repository.Abstract;
 
 namespace Repository.Concerete
 {
-    public class AutoDeskAppBundleRepository:IAutoDeskAppBundleRepository
+    public class AutoDeskDesignAutomationRepository:IAutoDeskDesignAutomationRepository
     {
         private readonly DesignAutomationClient _designAutomation=new DesignAutomationClient();
 
@@ -31,6 +31,21 @@ namespace Repository.Concerete
         public async Task<Page<string>> GetAppBundles(string page)
         {
             return await _designAutomation.GetAppBundlesAsync(page);
+        }
+
+        public async Task<dynamic> CreateActitivity(Activity activitySpec)
+        {
+            return await _designAutomation.CreateActivityAsync(activitySpec);
+        }
+
+        public async Task<Page<string>> GetActivities(string page)
+        {
+            return await _designAutomation.GetActivitiesAsync(page);
+        }
+
+        public async Task<dynamic> CreateActitvityAliasAsync(string Id, Alias aliasSpec)
+        {
+            return await _designAutomation.CreateActivityAliasAsync(Id, aliasSpec);
         }
 
 
@@ -60,6 +75,8 @@ namespace Repository.Concerete
         {
             throw new NotImplementedException();
         }
+
+     
 
         #endregion
     }
