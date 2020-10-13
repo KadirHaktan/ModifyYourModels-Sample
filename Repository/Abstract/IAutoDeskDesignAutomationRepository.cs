@@ -7,10 +7,12 @@ using Core.Interfaces.Repository;
 
 namespace Repository.Abstract
 {
-    public interface IAutoDeskDesignAutomationRepository:IRepository<AppBundle>
+    public interface IAutoDeskDesignAutomationRepository:IRepository
     {
 
+        Task<AppBundle> CreateAsync(AppBundle entity);
 
+        Task CreateVoidAsync(AppBundle entity);
         Task<Alias> ModifyAsync(string appBundleName,string Alias,AliasPatch aliasSpec);
 
         Task<Alias> CreateAppBundleAsync(string appBundleName, Alias aliasSpec);
@@ -19,6 +21,8 @@ namespace Repository.Abstract
 
         Task<dynamic> CreateActitvityAliasAsync(string Id, Alias aliasSpec);
         Task<dynamic> CreateActitivity(Activity activitySpec);
+
+        Task<WorkItemStatus> CreateWorkItem(WorkItem workItemSpec);
 
         Task<Page<string>> GetAppBundles(string page);
 

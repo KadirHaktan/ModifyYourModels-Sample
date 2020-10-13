@@ -59,25 +59,14 @@ namespace Repository.Concerete
             return await _designAutomation.GetEnginesAsync(page);
         }
 
-
-        #region these methods have not been used
-        public void CreateVoid(AppBundle entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public AppBundle Create(AppBundle entity)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<Alias> CreateAppBundleAsync(string appBundleName, Alias aliasSpec)
         {
             throw new NotImplementedException();
         }
 
-     
-
-        #endregion
+        public async Task<WorkItemStatus> CreateWorkItem(WorkItem workItemSpec)
+        {
+            return await _designAutomation.CreateWorkItemAsync(workItemSpec);
+        }
     }
 }
