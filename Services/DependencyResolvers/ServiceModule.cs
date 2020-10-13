@@ -3,7 +3,6 @@ using Autodesk.Forge;
 using Core.Interfaces.Adapters;
 using Core.Interfaces.Services.Auth;
 using Core.Utilities.Ioc;
-using Entities.Concerete;
 using Microsoft.Extensions.DependencyInjection;
 using Repository.Abstract;
 using Repository.Concerete;
@@ -34,6 +33,11 @@ namespace Services.DependencyResolvers
 
             services.AddTransient<IEngineServices, AutoDeskEngineService>();
             services.AddTransient<IEngineServiceAdapter, EngineServiceAdapter>();
+
+            services.AddTransient<IWorkItemService, AutoDeskWorkItemService>();
+            services.AddTransient<IWorkItemServiceAdapter, WorkItemServiceAdapter>();
+
+
 
 
 
