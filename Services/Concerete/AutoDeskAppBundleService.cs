@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Autodesk.Forge.DesignAutomation.Model;
 using Core.Utilities.Configurations;
-using Entities.Concerete;
 using Newtonsoft.Json.Linq;
 using Repository.Abstract;
 using Services.Abstract;
