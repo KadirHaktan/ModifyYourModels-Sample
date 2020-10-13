@@ -22,3 +22,6 @@ ModifyYourModels.sln
 /Repository/obj
 /Repository/Repository.csproj
 /Repository/bin/Debug/netcoreapp3.1
+/Models/bin/Debug/netcoreapp3.1
+/Models/obj
+/Models/Models.csproj
