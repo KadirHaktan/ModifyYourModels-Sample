@@ -5,7 +5,7 @@ using Core.Interfaces.Entities;
 
 namespace Core.Interfaces.Repository
 {
-    public interface IIEntityRepository<T>:IRepository<T> where T:class,IEntity
+    public interface IIEntityRepository<T>:IRepository where T:class,IEntity
     {
     }
 }

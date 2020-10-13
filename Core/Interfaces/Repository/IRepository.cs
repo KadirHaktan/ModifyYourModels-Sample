@@ -5,16 +5,9 @@ using System.Threading.Tasks;
 
 namespace Core.Interfaces.Repository
 {
-    public interface IRepository<T> where T:class
+    public interface IRepository
     {
         
-        Task<T> CreateAsync(T entity);
-
-        T Create(T entity);
-
-        Task CreateVoidAsync(T entity);
-
-        void CreateVoid(T entity);
 
     }
 }
