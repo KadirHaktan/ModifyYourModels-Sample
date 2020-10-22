@@ -12,5 +12,7 @@ namespace API.Hubs
         {
             return Context.ConnectionId;
         }
+
+      
     }
 }
