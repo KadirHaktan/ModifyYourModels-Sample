@@ -25,3 +25,12 @@ ModifyYourModels.sln
 /Models/bin/Debug/netcoreapp3.1
 /Models/obj
 /Models/Models.csproj
+/UpdateIPTParam/bin
+/UpdateIPTParam/obj
+/packages
+/UpdateDWGParam/bin/Debug
+/UpdateDWGParam/obj/Debug
+/UpdateDWGParam/Properties
+/UpdateDWGParam/UpdateDWGParam.bundle/Contents
+/UpdateDWGParam/UpdateDWGParam.csproj
+/UpdateIPTParam/Properties
