@@ -24,6 +24,9 @@ function list(control, endpoint) {
                 $('#' + control).append($('<option>', { disabled: true, text: 'Nothing found' }));
             else
                 list.forEach(function (item) { $('#' + control).append($('<option>', { value: item, text: item })); })
+        },
+        error: function (e,m,s) {
+            console.log(m);
         }
     });
 }
@@ -40,6 +43,7 @@ function clearAccount() {
             prepareLists();
             writeLog('Account cleared, all appbundles & activities deleted');
         }
+        
     });
 }
 

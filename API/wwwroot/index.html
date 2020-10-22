@@ -5,19 +5,19 @@
     <title>Autodesk Forge - Design Automation</title>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="https://github.com/Autodesk-Forge/learn.forge.viewhubmodels/raw/master/img/favicon.ico">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- Common packages: jQuery, Bootstrap -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- .NET SignalR -->
     <script src="//unpkg.com/@aspnet/signalr@1.1.0/dist/browser/signalr.min.js"></script>
+    <!-- Files for this project -->
     <script src="/js/ForgeDesignAutomation.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 </head>
 
 <body style="height: 100%;">
-<nav class="navbar navbar-default navbar-fixed-top">
+    <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
+    <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <ul class="nav navbar-nav left">
                 <li>
@@ -34,7 +34,8 @@
             </div>
         </div>
     </nav>
-<div class="container-fluid" style="margin-top: 70px;">
+    <!-- End of navbar -->
+    <div class="container-fluid" style="margin-top: 70px;">
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
@@ -61,7 +62,8 @@
             </div>
         </div>
     </div>
-<div class="modal fade" id="defineActivityModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <!-- Modal Define AppBundle & Activity -->
+    <div class="modal fade" id="defineActivityModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -90,5 +92,5 @@
         </div>
     </div>
 </body>
-</html>
 
+</html>
