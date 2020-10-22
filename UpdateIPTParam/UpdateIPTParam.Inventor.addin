@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Addin Type="Plugin">
+  <ClassId>{53f25d4f-be93-4a30-95fe-959511722214}</ClassId>
+  <ClientId>{53f25d4f-be93-4a30-95fe-959511722214}</ClientId>
+  <DisplayName>UpdateIPTParam</DisplayName>
+  <Description>a UpdateIPTParam</Description>
+  <Assembly>UpdateIPTParam.dll</Assembly>
+</Addin>
