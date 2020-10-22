@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Hubs;
 using Autodesk.Forge.DesignAutomation;
 using Core.Business.DependencyResolvers;
 using Core.Extensions;
@@ -40,6 +41,8 @@ namespace API
 
             
 
+            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,15 +59,15 @@ namespace API
 
             app.UseAuthorization();
 
-            app.UseMvc();
-
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(routes =>
             {
-                endpoints.MapControllers();
+                routes.MapHub<DesignAutomationHub>("/api/signalr/designautomation");
+                routes.MapControllers();
             });
 
             app.UseFileServer();
-            
+
+
         }
     }
 }
