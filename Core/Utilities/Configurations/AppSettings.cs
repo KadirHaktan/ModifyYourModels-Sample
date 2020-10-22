@@ -4,11 +4,12 @@ using System.Text;
 
 namespace Core.Utilities.Configurations
 {
-    public static class AppSettings
+    public class AppSettings
     {
         public static string Get(string settingKey)
         {
-            return Environment.GetEnvironmentVariable(settingKey);
+            string result = Environment.GetEnvironmentVariable(settingKey).Trim();
+            return result;
         }
     }
 }
