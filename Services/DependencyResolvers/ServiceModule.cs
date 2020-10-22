@@ -38,6 +38,9 @@ namespace Services.DependencyResolvers
             services.AddTransient<IWorkItemServiceAdapter, WorkItemServiceAdapter>();
 
 
+            services.AddTransient<IActivityService, AutoDeskActivityService>();
+            services.AddTransient<IActivityServiceAdapter, ActivityServiceAdapter>();
+
 
 
 

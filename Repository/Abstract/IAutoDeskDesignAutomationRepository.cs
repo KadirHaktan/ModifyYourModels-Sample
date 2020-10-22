@@ -24,11 +24,13 @@ namespace Repository.Abstract
 
         Task<WorkItemStatus> CreateWorkItem(WorkItem workItemSpec);
 
-        Task<Page<string>> GetAppBundles(string page);
+        Task<Page<string>> GetAppBundles();
 
-        Task<Page<string>> GetAppEngines(string page);
+        Task<Page<string>> GetAppEngines();
 
-        Task<Page<string>> GetActivities(string page);
+        Task<Page<string>> GetActivities();
+
+        Task DeleteForgeApp(string id);
 
 
     }

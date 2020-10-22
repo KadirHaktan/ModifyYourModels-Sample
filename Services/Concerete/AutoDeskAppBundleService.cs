@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Autodesk.Forge.DesignAutomation.Model;
 using Core.Utilities.Configurations;
@@ -24,41 +25,51 @@ namespace Services.Concerete
         
         public async Task<dynamic> CreateAppBundle(JObject appBundlesSpecs,string LocalBundlesFolder)
         {
-
-            string zipFileName = appBundlesSpecs["zipFileName"].Value<string>();
-            string engineName = appBundlesSpecs["engineName"].Value<string>();
-
-            string appBundleName = zipFileName + "AppBundle";
-            string NickName = AppSettings.Get("FORGE_CLIENT_ID");
-            string Alias = "dev";
-
-            await CheckOutExistToZipPath(LocalBundlesFolder, zipFileName);
-
-
-            Page<string> pages = await _repository.GetAppBundles(null);
-
-
-            dynamic newAppVersion;
-
-            QualifiedAppBundleId = string.Format("{0}.{1}+{2}", NickName, appBundleName, Alias);
-
-            if (!pages.Data.Contains(QualifiedAppBundleId))
+            try
             {
-                newAppVersion=await CreateNewAppBundle(appBundleName,engineName,Alias,1);
+                string zipFileName = appBundlesSpecs["zipFileName"].Value<string>();
+                string engineName = appBundlesSpecs["engine"].Value<string>();
+
+                string appBundleName = zipFileName + "AppBundle";
+                string NickName = AppSettings.Get("FORGE_CLIENT_ID");
+                string Alias = "dev";
+
+                await CheckOutExistToZipPath(LocalBundlesFolder, zipFileName);
+
+
+                Page<string> pages = await _repository.GetAppBundles();
+
+
+                dynamic newAppVersion;
+
+                QualifiedAppBundleId = string.Format("{0}.{1}+{2}", NickName, appBundleName, Alias);
+
+                if (!pages.Data.Contains(QualifiedAppBundleId))
+                {
+                    newAppVersion = await CreateNewAppBundle(appBundleName, engineName, Alias, 1);
+                }
+
+                else
+                {
+                    newAppVersion = await CreateNewVersion(engineName, appBundleName, Alias);
+                }
+
+
+                return new
+                {
+                    newAppVersion = newAppVersion,
+                    packageZipFileName = zipFileName,
+                    QualifiedAppBundleId = QualifiedAppBundleId
+                };
+
             }
 
-            else
+            catch (Exception e)
             {
-                newAppVersion=await CreateNewVersion(engineName, appBundleName, Alias);
+                throw e;
             }
 
 
-            return new
-            {
-                newVersion=newAppVersion,
-                packageZipFileName=zipFileName,
-                QualifiedAppBundleId=QualifiedAppBundleId
-            };
 
         }
 
@@ -135,6 +146,12 @@ namespace Services.Concerete
             {
                 throw new Exception("Cannot create new app");
             }
+        }
+
+        public string[] GetLocalBundles(string LocalBundlesFolder)
+        {
+            string[] result=Directory.GetFiles(LocalBundlesFolder, "*.zip").Select(Path.GetFileNameWithoutExtension).ToArray();
+            return result;
         }
 
         #endregion

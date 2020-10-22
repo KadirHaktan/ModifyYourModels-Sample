@@ -12,23 +12,31 @@ namespace Services.Concerete
 {
     public class AutoDeskEngineService : IEngineServices
     {
-        private readonly IAuthServiceAdapter _authServiceAdapter;
+       // private readonly IAuthServiceAdapter _authServiceAdapter;
 
         private readonly IAutoDeskDesignAutomationRepository _repository;
-        public AutoDeskEngineService(IAuthServiceAdapter authServiceAdapter,IAutoDeskDesignAutomationRepository repository)
+        private readonly IAuthServiceAdapter _authServiceAdapter;
+        public AutoDeskEngineService(IAutoDeskDesignAutomationRepository repository,IAuthServiceAdapter authServiceAdapter)
         {
-            this._authServiceAdapter = authServiceAdapter;
             this._repository = repository;
+            this._authServiceAdapter = authServiceAdapter;
         }
         public async Task<List<string>> GetAvailableEnginesToString()
         {
-            dynamic token = await _authServiceAdapter.GetAccessTokenAdapterAsync();
+            try
+            {
+                dynamic oauth = await  _authServiceAdapter.GetAccessTokenAdapterAsync();
+                Page<string> engines = await _repository.GetAppEngines();
 
-            Page<string> engines = await _repository.GetAppEngines(null);
+                engines.Data.Sort();
 
-            engines.Data.Sort();
-
-            return engines.Data;
+                return engines.Data;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+          
         }
     }
 }

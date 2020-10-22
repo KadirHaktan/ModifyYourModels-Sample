@@ -9,7 +9,12 @@ namespace Repository.Concerete
 {
     public class AutoDeskDesignAutomationRepository:IAutoDeskDesignAutomationRepository
     {
-        private readonly DesignAutomationClient _designAutomation=new DesignAutomationClient();
+        private readonly DesignAutomationClient _designAutomation;
+
+        public AutoDeskDesignAutomationRepository(DesignAutomationClient designAutomation)
+        {
+            this._designAutomation = designAutomation;
+        }
 
 
         public async Task<dynamic> CreateAppBundleVersionAsync(string appBundleName, AppBundle appBundleSpec)
@@ -28,9 +33,10 @@ namespace Repository.Concerete
             await _designAutomation.CreateAppBundleAsync(entity);
         }
 
-        public async Task<Page<string>> GetAppBundles(string page)
+        public async Task<Page<string>> GetAppBundles()
         {
-            return await _designAutomation.GetAppBundlesAsync(page);
+            var result= await _designAutomation.GetAppBundlesAsync();
+            return result;
         }
 
         public async Task<dynamic> CreateActitivity(Activity activitySpec)
@@ -38,9 +44,10 @@ namespace Repository.Concerete
             return await _designAutomation.CreateActivityAsync(activitySpec);
         }
 
-        public async Task<Page<string>> GetActivities(string page)
+        public async Task<Page<string>> GetActivities()
         {
-            return await _designAutomation.GetActivitiesAsync(page);
+            var result= await _designAutomation.GetActivitiesAsync();
+            return result;
         }
 
         public async Task<dynamic> CreateActitvityAliasAsync(string Id, Alias aliasSpec)
@@ -54,19 +61,26 @@ namespace Repository.Concerete
             return await _designAutomation.ModifyAppBundleAliasAsync(appBundleName, Alias, aliasSpec);
         }
 
-        public async Task<Page<string>> GetAppEngines(string page)
+        public async Task<Page<string>> GetAppEngines()
         {
-            return await _designAutomation.GetEnginesAsync(page);
+            var result = await _designAutomation.GetEnginesAsync();
+            return result;
         }
 
-        public Task<Alias> CreateAppBundleAsync(string appBundleName, Alias aliasSpec)
+        public async Task<Alias> CreateAppBundleAsync(string appBundleName, Alias aliasSpec)
         {
-            throw new NotImplementedException();
+            var result = await _designAutomation.CreateAppBundleAliasAsync(appBundleName, aliasSpec);
+            return result;
         }
 
         public async Task<WorkItemStatus> CreateWorkItem(WorkItem workItemSpec)
         {
             return await _designAutomation.CreateWorkItemAsync(workItemSpec);
+        }
+
+        public async Task DeleteForgeApp(string id)
+        { 
+            await _designAutomation.DeleteForgeAppAsync(id);
         }
     }
 }

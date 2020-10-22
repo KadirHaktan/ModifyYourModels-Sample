@@ -10,5 +10,7 @@ namespace Services.Abstract
     {
         Task<dynamic> CreateAppBundle(JObject appBundle,string LocalBundlesFolder);
 
+        string[] GetLocalBundles(string LocalBundlesFolder);
+
     }
 }

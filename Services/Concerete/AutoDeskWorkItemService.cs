@@ -14,6 +14,7 @@ using Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Repository.Abstract;
+using RestSharp;
 using Services.Abstract;
 using WorkItem = Autodesk.Forge.DesignAutomation.Model.WorkItem;
 
@@ -25,7 +26,7 @@ namespace Services.Concerete
         private readonly IAuthServiceAdapter _serviceAdapter;
 
         string NickName = AppSettings.Get("FORGE_CLIENT_ID");
-        private string WebHookUrl = AppSettings.Get("FORGE_WEBHOOK_URL");
+        string WebHookUrl = AppSettings.Get("FORGE_WEBHOOK_URL");
 
        
 
@@ -70,6 +71,22 @@ namespace Services.Concerete
             return await GetWorkItemId(inputFileArgument, outputFileArgument, inputJsonArgument, callbackUrl, input.data);
 
 
+        }
+
+        public string CreateToLSendingLog(RestClient client, RestRequest request)
+        {
+            byte[] bs = client.DownloadData(request);
+            string report = System.Text.Encoding.Default.GetString(bs);
+
+            return report;
+        }
+
+        public async Task<dynamic> GenerateSignedUrl(string outputFileName)
+        {
+            ObjectsApi objectsApi = new ObjectsApi();
+            dynamic signedUrl = await objectsApi.CreateSignedResourceAsyncWithHttpInfo(NickName.ToLower() + "-designautomation", outputFileName, new PostBucketsSigned(10), "read");
+
+            return signedUrl;
         }
 
         private string CreateArgumentUrl(string bucketKey, string FileNameOss)
@@ -220,5 +237,7 @@ namespace Services.Concerete
                 WorkItemId = workItemStatus.Id
             };
         }
+
+      
     }
 }

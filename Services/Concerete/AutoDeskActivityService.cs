@@ -16,7 +16,9 @@ namespace Services.Concerete
     {
         private readonly IAutoDeskDesignAutomationRepository _repository;
 
-        string NickName = AppSettings.Get("FORGE_CLIENT_ID");
+        private string NickName = AppSettings.Get("FORGE_CLIENT_ID");
+
+
         public AutoDeskActivityService(IAutoDeskDesignAutomationRepository repository)
         {
             this._repository = repository;
@@ -33,7 +35,7 @@ namespace Services.Concerete
 
             string Alias = "dev";
 
-            Page<string> activities = await _repository.GetActivities(null);
+            Page<string> activities = await _repository.GetActivities();
 
             string qualifiedActivityId = string.Format("{0}.{1}+{2}", NickName, activityName, Alias);
 
@@ -53,14 +55,22 @@ namespace Services.Concerete
 
         public async Task<List<string>> GetDefinedActivities()
         {
+            try
+            {
+                Page<string> activities = await _repository.GetActivities();
+                List<string> definedActivities = new List<string>();
+                foreach (string activity in activities.Data)
+                    if (activity.StartsWith(NickName) && activity.IndexOf("$LATEST") == -1)
+                        definedActivities.Add(activity.Replace(NickName + ".", String.Empty));
 
-            Page<string> activities = await _repository.GetActivities(null);
-            List<string> definedActivities = new List<string>();
-            foreach (string activity in activities.Data)
-                if (activity.StartsWith(NickName) && activity.IndexOf("$LATEST") == -1)
-                    definedActivities.Add(activity.Replace(NickName + ".", String.Empty));
+                return definedActivities;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
-            return definedActivities;
+            
         }
 
         private async Task<dynamic> ActivityNotExist(string engineName, string appBundleName, string activityName, string NickName, string Alias,

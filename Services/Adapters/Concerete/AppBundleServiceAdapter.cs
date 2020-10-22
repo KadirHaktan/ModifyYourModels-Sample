@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Entities.Abstract;
 using Newtonsoft.Json.Linq;
 using Services.Abstract;
 using Services.Adapters.Abstract;
@@ -20,6 +19,11 @@ namespace Services.Adapters.Concerete
         public async Task<dynamic> CreateAppBundleAsync(JObject appBundle, string localBundlesFolder)
         {
             return await _appBundleService.CreateAppBundle(appBundle, localBundlesFolder);
+        }
+
+        public string[] GetLocalBundles(string localBundlesFolder)
+        {
+            return _appBundleService.GetLocalBundles(localBundlesFolder);
         }
     }
 }
