@@ -47,24 +47,33 @@ namespace API.Controllers
         [Route("api/forge/designautomation/appbundles")]
         public async Task<IActionResult> CreateAppBundle([FromBody] JObject bundle)
         {
-            string localBundlesFolder = Path.Combine(_envoironment.WebRootPath, "bundles");
-            dynamic result = await _serviceAdapter.CreateAppBundleAsync(bundle, localBundlesFolder);
-
-            dynamic newVersion = result.newAppVersion;
-            dynamic packageZipFileName = result.packageZipFileName;
-            dynamic UploadParameters = newVersion.UploadParameters;
-            dynamic QualifiedAppBundleId = result.QualifiedAppBundleId;
-
-            await RestSharpHttpEnvoirmentHelper.CreateHttpFormDataEnvoirment(UploadParameters.EndpointURL, Method.POST,
-                UploadParameters.FormData, packageZipFileName, "no-cache");
-
-
-            return Ok(new
+            try
             {
-                AppBundle = QualifiedAppBundleId,
-                Version = newVersion.Version
+                string localBundlesFolder = Path.Combine(_envoironment.WebRootPath, "bundles");
+                dynamic result = await _serviceAdapter.CreateAppBundleAsync(bundle, localBundlesFolder);
 
-            });
+                dynamic newVersion = result["newAppVersion"];
+                dynamic packageZipFileName = result["packageZipFileName"] + ".zip";
+                dynamic UploadParameters = newVersion.UploadParameters;
+                dynamic QualifiedAppBundleId = result["QualifiedAppBundleId"];
+
+                await RestSharpHttpEnvoirmentHelper.CreateHttpFormDataEnvoirment(UploadParameters.EndpointURL,
+                    Method.POST,
+                    UploadParameters.FormData, packageZipFileName, "no-cache");
+
+
+                return Ok(new
+                {
+                    AppBundle = QualifiedAppBundleId,
+                    Version = newVersion.Version
+
+                });
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+           
 
         }
 
@@ -122,7 +131,10 @@ namespace API.Controllers
 
             }
 
-            catch{}
+            catch(Exception e)
+            {
+                throw e;
+            }
 
             return Ok();
         }
