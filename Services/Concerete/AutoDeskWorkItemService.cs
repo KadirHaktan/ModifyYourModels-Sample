@@ -7,6 +7,7 @@ using Autodesk.Forge;
 using Autodesk.Forge.DesignAutomation;
 using Autodesk.Forge.DesignAutomation.Model;
 using Autodesk.Forge.Model;
+using Core.Extensions;
 using Core.Interfaces.Adapters;
 using Core.Utilities.Configurations;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +29,7 @@ namespace Services.Concerete
         string NickName = AppSettings.Get("FORGE_CLIENT_ID");
         string WebHookUrl = AppSettings.Get("FORGE_WEBHOOK_URL");
 
-       
+      
 
         public AutoDeskWorkItemService(IAutoDeskDesignAutomationRepository repository,IAuthServiceAdapter serviceAdapter)
         {
@@ -43,7 +44,7 @@ namespace Services.Concerete
         {
             string fileSavePath = await SaveTheFileOnTheServer(input.inputFile, rootPath);
 
-            string bucketKey = NickName.ToLower() + "-designautomation";
+            string bucketKey = NickName.ToLower().ReplyToCharToEnglishFormat() + "-designautomation7";
 
             var accessToken = await AccessToken();
 
@@ -54,8 +55,9 @@ namespace Services.Concerete
             var inputFileArgument = CreateArgument(inputFileArgumentUrl, accessToken);
 
             dynamic inputJson = new JObject();
-            inputJson.Width = BasicInputValidation(input.data)["widthParam"];
-            inputJson.Height = BasicInputValidation(input.data)["heightParam"];
+            var validationData = BasicInputValidation(input.data);
+            inputJson.Width = validationData["widthParam"];
+            inputJson.Height = validationData["heigthParam"];
             string inputJsonArgumentUrl = "data:application/json, " + ((JObject) inputJson).ToString(Formatting.None).Replace("\"", "'");
             var inputJsonArgument = CreateArgument(inputJsonArgumentUrl);
 
@@ -63,12 +65,12 @@ namespace Services.Concerete
             string outputFileNameOSS = CreateFileNameOss(input.inputFile, "output");
             string outputFileArgumentUrl = CreateArgumentUrl(bucketKey, outputFileNameOSS);
             var outputFileArgument = CreateArgument(outputFileArgumentUrl, accessToken, Verb.Put);
-            string browerConnectionId = BasicInputValidation(input.data)["browerConnectionId"];
+            string browerConnectionId = validationData["browerConnectionId"];
             string callbackUrl = string.Format("{0}/api/forge/callback/designautomation?id={1}&outputFileName={2}",WebHookUrl,browerConnectionId, outputFileNameOSS);
 
 
 
-            return await GetWorkItemId(inputFileArgument, outputFileArgument, inputJsonArgument, callbackUrl, input.data);
+            return await GetWorkItemId(inputFileArgument, outputFileArgument, inputJsonArgument, callbackUrl, validationData["activityName"]);
 
 
         }
@@ -83,8 +85,9 @@ namespace Services.Concerete
 
         public async Task<dynamic> GenerateSignedUrl(string outputFileName)
         {
+            string bucketKey = NickName.ToLower().ReplyToCharToEnglishFormat() + "-designautomation7";
             ObjectsApi objectsApi = new ObjectsApi();
-            dynamic signedUrl = await objectsApi.CreateSignedResourceAsyncWithHttpInfo(NickName.ToLower() + "-designautomation", outputFileName, new PostBucketsSigned(10), "read");
+            dynamic signedUrl = await objectsApi.CreateSignedResourceAsyncWithHttpInfo(bucketKey, outputFileName, new PostBucketsSigned(10), "read");
 
             return signedUrl;
         }
@@ -146,7 +149,8 @@ namespace Services.Concerete
                 {"widthParam", widthParam},
                 {"heigthParam", heigthParam},
                 {"activityName", activityName},
-                {"browerConnectionId", browerConnectionId}
+                {"browerConnectionId",browerConnectionId}
+              
 
             };
         }
@@ -154,7 +158,10 @@ namespace Services.Concerete
         private async Task<string> SaveTheFileOnTheServer(IFormFile inputFile,string rootPath)
         {
             var fileSavePath = Path.Combine(rootPath, Path.GetFileName(inputFile.FileName));
-            using (var stream = new FileStream(fileSavePath, FileMode.Create)) await inputFile.CopyToAsync(stream);
+            using (var stream = new FileStream(fileSavePath, FileMode.Create)) 
+            { 
+                await inputFile.CopyToAsync(stream); 
+            }
 
             return fileSavePath;
         }
@@ -164,7 +171,7 @@ namespace Services.Concerete
             
             return new BucketsApi()
             {
-                Configuration =
+                Configuration=
                 {
                     AccessToken = accessToken
                 }
@@ -185,29 +192,42 @@ namespace Services.Concerete
 
         }
 
-        private async Task CreateBucketsApi(BucketsApi bucketsApi,string bucketKey)
+        private async Task<dynamic> CreateBucketsApi(BucketsApi bucketsApi,string bucketKey)
         {
             try
             {
                 PostBucketsPayload postBucketsPayload=new PostBucketsPayload(bucketKey,null,PostBucketsPayload.PolicyKeyEnum.Transient);
-                await bucketsApi.CreateBucketAsync(postBucketsPayload, "US");
+                var result= await bucketsApi.CreateBucketAsync(postBucketsPayload, "US");
+                return result;
             }
-            catch{}
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
 
         private async Task<string> UploadInputFileToObject(dynamic accessToken,string fileSavePath,IFormFile inputFile,string bucketKey)
         {
-            var inputFileNameOSS = CreateFileNameOss(inputFile,"input");
-
-            ObjectsApi objects =SetAccessTokenToObjects(accessToken);
-
-            using (StreamReader streamReader = new StreamReader(fileSavePath))
+            try
             {
-                await objects.UploadObjectAsync(bucketKey, inputFileNameOSS, (int)streamReader.BaseStream.Length, streamReader.BaseStream, "application/octet-stream");
-            }
-            System.IO.File.Delete(fileSavePath);
+                var inputFileNameOSS = CreateFileNameOss(inputFile, "input");
 
-            return inputFileNameOSS;
+                ObjectsApi objects = SetAccessTokenToObjects(accessToken);
+
+                using (StreamReader streamReader = new StreamReader(fileSavePath))
+                {
+                    await objects.UploadObjectAsync(bucketKey, inputFileNameOSS, (int)streamReader.BaseStream.Length, streamReader.BaseStream, "application/octet-stream");
+                }
+                System.IO.File.Delete(fileSavePath);
+
+                return inputFileNameOSS;
+
+            }
+
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
 
         private string CreateFileNameOss(IFormFile inputFile,string option)
@@ -217,11 +237,11 @@ namespace Services.Concerete
             return FileNameOSS;
         }
 
-        private async Task<dynamic> GetWorkItemId(XrefTreeArgument inputFileArgument,XrefTreeArgument outputFileArgument,XrefTreeArgument inputJsonArgument,string callbackUrl,string data )
+        private async Task<dynamic> GetWorkItemId(XrefTreeArgument inputFileArgument,XrefTreeArgument outputFileArgument,XrefTreeArgument inputJsonArgument,string callbackUrl,string ActivityId )
         {
             WorkItem workItemSpec = new WorkItem()
             {
-                ActivityId = BasicInputValidation(data)["activityName"],
+                ActivityId = ActivityId,
                 Arguments = new Dictionary<string, IArgument>()
                 {
                     { "inputFile", inputFileArgument },

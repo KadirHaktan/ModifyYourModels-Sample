@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,12 +56,13 @@ namespace Services.Concerete
                 }
 
 
-                return new
+                return new Dictionary<string, dynamic>()
                 {
-                    newAppVersion = newAppVersion,
-                    packageZipFileName = zipFileName,
-                    QualifiedAppBundleId = QualifiedAppBundleId
+                    {"newAppVersion",newAppVersion},
+                    {"packageZipFileName",zipFileName},
+                    {"QualifiedAppBundleId",QualifiedAppBundleId}
                 };
+
 
             }
 
