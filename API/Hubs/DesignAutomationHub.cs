@@ -8,7 +8,7 @@ namespace API.Hubs
 {
     public class DesignAutomationHub:Hub
     {
-        public string ConnectionId()
+        public string GetConnectionId()
         {
             return Context.ConnectionId;
         }
